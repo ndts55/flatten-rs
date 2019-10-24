@@ -18,21 +18,18 @@ fn flatten(dir: &path::Path) -> io::Result<()> {
         env::set_current_dir(dir).unwrap();
         for entry in fs::read_dir(dir)? {
             let entry = entry?;
-            let mut path = entry.path();
+            let path = entry.path();
             let path_name = path.file_name().unwrap().to_str().unwrap().to_owned();
             if path.is_dir() {
                 env::set_current_dir(&path).unwrap();
-                // move children outside, prepend own name
                 for child in fs::read_dir(&path)? {
                     let child = child?;
-                    let f_n = child.file_name();
-                    let name = f_n.to_str().unwrap();
+                    let file_name = child.file_name();
+                    let name = file_name.to_str().unwrap();
                     let new_name = path_name.clone() + " - " + name;
                     println!("{}", new_name);
                     fs::rename(name, "../".to_string() + &new_name)?;
                 }
-                path.pop();
-                env::set_current_dir(path).unwrap();
             }
         }
     }
