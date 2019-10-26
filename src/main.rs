@@ -1,15 +1,19 @@
-use std::{self, path};
-use structopt::StructOpt;
+use std::env;
+use std::error::Error;
+use std::io;
 
+fn main() -> Result<(), Box<dyn Error>> {
+    let args: Vec<String> = env::args().collect();
+    let path = flatten::determine_path(args.get(1))?;
+    let name = path.to_str().unwrap();
+    println!("flattening {}\nwould you like to proceed? Y/n", name);
+    let mut input = String::new();
+    io::stdin().read_line(&mut input)?;
+    if input.contains("n") || input.contains("N") {
+        return Ok(());
+    }
+    flatten::flatten(&path)?;
+    println!("success!");
 
-#[derive(StructOpt)]
-struct Args {
-    #[structopt(parse(from_os_str))]
-    path: path::PathBuf,
-}
-
-fn main() {
-    let args = Args::from_args();
-    let res = flatten::flatten(&args.path);
-    println!("{:?}", res);
+    Ok(())
 }

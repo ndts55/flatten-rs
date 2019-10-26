@@ -1,6 +1,14 @@
-use std::{self, env, fs, io, path};
+use std::path::{Path, PathBuf};
+use std::{self, env, fs, io};
 
-pub fn flatten(dir: &path::Path) -> io::Result<()> {
+pub fn determine_path(input: Option<&String>) -> io::Result<PathBuf> {
+    let default_dir = String::from(".");
+    let dir = input.unwrap_or(&default_dir);
+    let path = Path::new(dir);
+    path.canonicalize()
+}
+
+pub fn flatten(dir: &Path) -> io::Result<()> {
     if dir.is_dir() {
         env::set_current_dir(dir).unwrap();
         for entry in fs::read_dir(dir)? {
@@ -14,7 +22,6 @@ pub fn flatten(dir: &path::Path) -> io::Result<()> {
                     let file_name = child.file_name();
                     let name = file_name.to_str().unwrap();
                     let new_name = path_name.clone() + " - " + name;
-                    println!("{}", new_name);
                     fs::rename(name, "../".to_string() + &new_name)?;
                 }
             }
