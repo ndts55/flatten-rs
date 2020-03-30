@@ -10,7 +10,6 @@ pub fn determine_path(input: Option<&String>) -> io::Result<PathBuf> {
 
 pub fn flatten_old(dir: &Path) -> io::Result<()> {
     if dir.is_dir() {
-        // env::set_current_dir(dir)?;
         for entry in fs::read_dir(dir)? {
             let entry = entry?;
             let path = entry.path();
@@ -30,9 +29,3 @@ pub fn flatten_old(dir: &Path) -> io::Result<()> {
 
     Ok(())
 }
-
-// pub fn flatten(dir: &Path) -> Vec<io::Result<()>> {
-//     if !dir.is_dir() {
-//         return Vec::new();
-//     }
-// }
