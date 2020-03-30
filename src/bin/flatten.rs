@@ -1,8 +1,7 @@
 use std::env;
-use std::error::Error;
 use std::io;
 
-fn main() -> Result<(), Box<dyn Error>> {
+fn main() -> io::Result<()> {
     let args: Vec<String> = env::args().collect();
     let path = flatten::determine_path(args.get(1))?;
     let name = path.to_str().unwrap();
@@ -12,7 +11,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     if input.contains("n") || input.contains("N") {
         return Ok(());
     }
-    flatten::flatten(&path)?;
+    flatten::flatten_old(&path)?;
     println!("success!");
 
     Ok(())
