@@ -11,7 +11,7 @@ fn main() -> io::Result<()> {
     if input.contains("n") || input.contains("N") {
         return Ok(());
     }
-    flatten::flatten_old(&path)?;
+    flatten::flatten(&path)?;
     println!("success!");
 
     Ok(())
